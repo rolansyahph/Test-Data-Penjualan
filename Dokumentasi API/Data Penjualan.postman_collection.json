@@ -1,0 +1,110 @@
+{
+	"info": {
+		"_postman_id": "2c9a3a71-8d72-4999-affd-0639aaa3bbca",
+		"name": "Data Penjualan",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "9088903"
+	},
+	"item": [
+		{
+			"name": "Master Barang",
+			"item": [
+				{
+					"name": "http://192.168.1.16:1010/get_data_barang",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://192.168.1.16:1010/get_data_barang"
+					},
+					"response": []
+				},
+				{
+					"name": "http://192.168.1.16:1010/input_data_barang",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nama_barang\": \"Rinso\",\r\n    \"stok\": 100,\r\n    \"satuan\": \"pcs\",\r\n    \"jenis_barang\": \"pembersih\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://192.168.1.16:1010/input_data_barang"
+					},
+					"response": []
+				},
+				{
+					"name": "http://192.168.1.16:1010/update_data_barang",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"kode_barang\": \"K-00009\",\r\n    \"stok\": 100\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://192.168.1.16:1010/update_data_barang"
+					},
+					"response": []
+				},
+				{
+					"name": "http://192.168.1.16:1010/hapus_data_barang",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"kode_barang\": \"K-00007\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://192.168.1.16:1010/hapus_data_barang"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Penjualan",
+			"item": [
+				{
+					"name": "http://192.168.1.16:1010/get_data_penjualan",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://192.168.1.16:1010/get_data_penjualan"
+					},
+					"response": []
+				},
+				{
+					"name": "http://192.168.1.16:1010/input_data_penjualan",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"kode_barang\": \"P-00001\",\r\n    \"jumlah_terjual\": 7\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://192.168.1.16:1010/input_data_penjualan"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
