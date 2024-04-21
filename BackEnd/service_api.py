@@ -14,7 +14,6 @@ connection = pymysql.connect(
     cursorclass=pymysql.cursors.DictCursor
 )
 
-
 @app.route('/get_data_barang', methods=['GET'])
 def get_data_barang():
     try:
@@ -22,6 +21,10 @@ def get_data_barang():
             # Pemanggil Stored Prosedure
             cursor.callproc('sp_get_data_barang')
             results = cursor.fetchall()
+
+            # Ubah format tanggal pada setiap hasil
+            for result in results:
+                result['tanggal_update'] = result['tanggal_update'].strftime('%d-%m-%Y')
 
         response = {
             'status': 200,
@@ -36,7 +39,6 @@ def get_data_barang():
             'data': []
         }
         return jsonify(error_response), 500
-    
 
 @app.route('/input_data_barang', methods=['POST'])
 def input_data_barang():
@@ -48,7 +50,6 @@ def input_data_barang():
         jenis_barang = data['jenis_barang']
 
         with connection.cursor() as cursor:
-            # Execute stored procedure
             cursor.callproc('sp_input_data_barang', (
                 nama_barang,
                 satuan,
@@ -62,6 +63,7 @@ def input_data_barang():
         return jsonify({'status': 'Error', 'message': str(ex)}), 500
     
 
+
 @app.route('/update_data_barang', methods=['POST'])
 def update_data_barang():
     try:
@@ -70,7 +72,6 @@ def update_data_barang():
         stok = data['stok']
 
         with connection.cursor() as cursor:
-            # Execute stored procedure
             cursor.callproc('sp_update_data_barang', (
                 kode_barang,
                 stok
@@ -108,7 +109,7 @@ def get_data_penjualan():
             results = cursor.fetchall()
 
             for result in results:
-                result['tanggal_transaksi'] = result['tanggal_transaksi'].strftime('%d-%m-%Y')
+                result['tanggal_transaksi'] = result['tanggal_transaksi'].strftime('%d-%m-%Y & %H:%M:%S')
 
         response = {
             'status': 200,
@@ -132,16 +133,30 @@ def input_data_penjualan():
         jumlah_terjual = data['jumlah_terjual']
 
         with connection.cursor() as cursor:
-            # Execute stored procedure
             cursor.callproc('sp_input_data_penjualan', (
                 kode_barang,
                 jumlah_terjual
             ))
             connection.commit()
 
-        return jsonify({'status': 'Sukses Input Data Penjualan'})
+        response = {
+            'status': 'success',
+            'message': 'Data berhasil ditambahkan'
+        }
+        return jsonify(response), 201
+    except KeyError:
+        response = {
+            'status': 'error',
+            'message': 'Ada kesalahan dalam permintaan, pastikan Anda menyertakan semua parameter yang diperlukan.'
+        }
+        return jsonify(response), 400
     except Exception as ex:
-        return jsonify({'status': 'Stok Tidak Cukup, Harapa Cek Terlebih dahulu', 'message': str(ex)}), 500
+        response = {
+            'status': 'error',
+            'message': 'Stok tidak cukup, harap cek terlebih dahulu.'
+        }
+        return jsonify(response), 500
 
 if __name__ == '__main__':
-    app.run(host='192.168.1.16', port=1010, debug= True)
+    app.run(host='127.0.0.1', port=1010)
+
